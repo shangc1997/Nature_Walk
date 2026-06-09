@@ -2,13 +2,14 @@
 
 Group Nature Walk Project is a SwiftUI iOS group assignment for the Introduction to iOS Development course.
 
-The app allows users to:
+The app is being built to allow users to:
 
-- browsing available guided activity sessions
-- opening a detail page for each session
-- contacting the guide or organization by phone number
-- marking a session to favorites
-- sharing session information
+- log in with an email address and password
+- browse available nature walk sessions
+- open a detail page for each session
+- contact the guide or organization by phone number
+- share session information
+- manage a favorites list
 
 ## Team Members
 
@@ -22,11 +23,11 @@ The app allows users to:
 
 ## Project Summary
 
-The current app is structured around a tab-based interface in `ContentView`:
+The current app is structured around a tab-based interface in `ContentView` with three main areas:
 
-- `Sessions`
-- `Favorites`
-- `Logout`
+- `SessionView`
+- `FavoritesView`
+- `ProfileView`
 
 The project also includes a `LoginView`, but it is still a placeholder and is not yet connected to the app launch flow.
 
@@ -34,37 +35,48 @@ The project also includes a `LoginView`, but it is still a placeholder and is no
 
 ### Completed
 
+- Main screen in `ContentView`
+  - Includes 3 tabs: `SessionView`, `FavoritesView`, and `LogoutView`
 - Session list screen in `SessionView`
-  - Displays session image, name, and price
+  - Displays available nature walk sessions
+  - Shows session photo, name, and price per person
   - Navigates to `DetailSessionView` when a session is selected
-- Session detail screen in `DetailSessionView`
-  - Displays session name
+- Session details screen in `DetailSessionView`
+  - Displays the chosen session name
   - Displays star rating
-  - Displays description
-  - Displays host or organization name
-  - Displays host phone number
   - Displays price per person
-  - Opens the phone dialer with `tel://`
-  - Lets the user add or remove a session from favorites
-  - Lets the user share the session name and price with `ShareLink`
+  - Displays description
+  - Displays host / organization name
+  - Displays host phone number
+  - Opens the phone dialer when the phone number is tapped
+  - Opens the iOS sharing widget and shares the session name and price
 - Sample session data managed by `SessionViewModel`
-- Tab bar navigation with `Sessions`, `Favorites`, and `Logout`
 
 ### In Progress
 
-- The detail screen includes a `Photos` section, but the photo gallery UI is not finished yet
-- Favorite state can be toggled from the detail screen, but `FavoritesView` is still only a placeholder
+- Session details screen in `DetailSessionView`
+  - Block 1 completed: name, star rating, and price per person
+  - Block 2 not completed: 2 photos
+  - Block 3 completed: description
+  - Block 4 completed: host / organization name and phone number
+  - Block 5 completed: favorites button and share button UI
+  - Favorites button behavior is not completed yet
 
 ### Planned / TODO
 
 - `LoginView`
+  - Create a `User` model to store user information
   - Build the actual login screen
-  - Redirect successful login to `ContentView`
+  - Add form validation
+  - Add a Remember Me checkbox
+  - Auto-fill email and password if Remember Me was selected
+  - Navigate to `ContentView` after successful login
 - `FavoritesView`
-  - Show the favorites list
-  - Remove a single saved session
-  - Remove all saved sessions
+  - View the favorites list
+  - Remove a single favorited session
+  - Remove all favorited sessions
 - `LogoutView`
+  - Display user information
   - Add a logout button
   - Return the user to the login screen
 
@@ -72,9 +84,9 @@ The project also includes a `LoginView`, but it is still a placeholder and is no
 
 - `LoginView` (placeholder)
 - `SessionView`
-- `DetailSessionView`
+- `DetailSessionView` (in progress)
 - `FavoritesView` (placeholder)
-- `LogoutView` (placeholder)
+- `ProfileView` (placeholder)
 
 ## Technologies Used
 
@@ -122,5 +134,4 @@ Group_Nature_Walk_Project/
 
 - The app currently launches directly into `ContentView`
 - Session data is hard-coded in `SessionViewModel`
-- The README has been aligned with the current source code and the feature checklist described in `Project.docx`
 - Update this README when new features are completed.
