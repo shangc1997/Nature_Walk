@@ -1,17 +1,14 @@
 # Group Nature Walk Project
 
-## Project Overview
-
-Group Nature Walk Project is an iOS app built with SwiftUI for a school group assignment.
+Group Nature Walk Project is a SwiftUI iOS group assignment for the Introduction to iOS Development course.
 
 The app allows users to:
 
-- browse available sessions
-- view session details
-- see session price and star rating
-- call the guide or organization by phone number
-- add a session to favorites
-- share session name and price
+- browsing available guided activity sessions
+- opening a detail page for each session
+- contacting the guide or organization by phone number
+- marking a session to favorites
+- sharing session information
 
 ## Team Members
 
@@ -23,40 +20,65 @@ The app allows users to:
 - Course Name: Introduction to iOS Development
 - Semester: Spring/Summer 2026
 
+## Project Summary
+
+The current app is structured around a tab-based interface in `ContentView`:
+
+- `Sessions`
+- `Favorites`
+- `Logout`
+
+The project also includes a `LoginView`, but it is still a placeholder and is not yet connected to the app launch flow.
+
 ## Current Features
 
-- Session list screen with image, name, and price
-- Session details screen with:
-  - session name
-  - description
-  - star rating
-  - host name
-  - host phone number
-  - price per person
-  - favorites button
-  - share button
-- Phone call support using `tel://`
-- Tab bar navigation
+### Completed
 
-## Current Screens
+- Session list screen in `SessionView`
+  - Displays session image, name, and price
+  - Navigates to `DetailSessionView` when a session is selected
+- Session detail screen in `DetailSessionView`
+  - Displays session name
+  - Displays star rating
+  - Displays description
+  - Displays host or organization name
+  - Displays host phone number
+  - Displays price per person
+  - Opens the phone dialer with `tel://`
+  - Lets the user add or remove a session from favorites
+  - Lets the user share the session name and price with `ShareLink`
+- Sample session data managed by `SessionViewModel`
+- Tab bar navigation with `Sessions`, `Favorites`, and `Logout`
 
-- Sessions
-- Session Details
-- Favorites
-- Logout
+### In Progress
 
-## Development Status
+- The detail screen includes a `Photos` section, but the photo gallery UI is not finished yet
+- Favorite state can be toggled from the detail screen, but `FavoritesView` is still only a placeholder
 
-- `SessionView`: implemented
-- `DetailSessionView`: implemented
-- `SessionViewModel`: implemented with `@Observable`
-- `FavoritesView`: basic placeholder, can be expanded
-- `LoginView`: placeholder
-- `LogoutView`: placeholder
+### Planned / TODO
+
+- `LoginView`
+  - Build the actual login screen
+  - Redirect successful login to `ContentView`
+- `FavoritesView`
+  - Show the favorites list
+  - Remove a single saved session
+  - Remove all saved sessions
+- `LogoutView`
+  - Add a logout button
+  - Return the user to the login screen
+
+## Screens
+
+- `LoginView` (placeholder)
+- `SessionView`
+- `DetailSessionView`
+- `FavoritesView` (placeholder)
+- `LogoutView` (placeholder)
 
 ## Technologies Used
 
-- Swift
+- Swift 5
 - SwiftUI
 - Observation framework (`@Observable`)
 - Xcode
@@ -69,8 +91,17 @@ Group_Nature_Walk_Project/
 ├── Group_Nature_Walk_Project/
 │   ├── Assets.xcassets/
 │   ├── Model/
+│   │   └── Session.swift
 │   ├── View/
+│   │   ├── ContentView.swift
+│   │   ├── DetailSessionView.swift
+│   │   ├── FavoritesView.swift
+│   │   ├── LoginView.swift
+│   │   ├── LogoutView.swift
+│   │   ├── SessionListItem.swift
+│   │   └── SessionView.swift
 │   ├── ViewModel/
+│   │   └── SessionViewModel.swift
 │   └── Group_Nature_Walk_ProjectApp.swift
 ├── Group_Nature_Walk_Project.xcodeproj/
 └── README.md
@@ -81,32 +112,11 @@ Group_Nature_Walk_Project/
 1. Clone this repository.
 2. Open `Group_Nature_Walk_Project.xcodeproj` in Xcode.
 3. Select an iPhone simulator or a real device.
-4. Press `Run` in Xcode.
+4. Build and run the app.
 
-## Collaboration Workflow
+## Development Notes
 
-- Use `main` as the shared stable branch.
-- Create a new branch for each feature or bug fix.
-- Write clear commit messages.
-- Push your branch to GitHub before merging.
-
-Example:
-
-```bash
-git checkout -b feature-session-detail
-git add .
-git commit -m "Add session detail screen"
-git push -u origin feature-session-detail
-```
-
-## Suggested Task Distribution
-
-- Session List UI: [Add Name]
-- Session Details UI: [Add Name]
-- Favorites Feature: [Add Name]
-- Login / Logout Screens: [Add Name]
-- Testing and GitHub Management: [Add Name]
-
-## Notes
-
+- The app currently launches directly into `ContentView`
+- Session data is hard-coded in `SessionViewModel`
+- The README has been aligned with the current source code and the feature checklist described in `Project.docx`
 - Update this README when new features are completed.
