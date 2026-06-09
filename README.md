@@ -88,6 +88,7 @@ The project also includes a `LoginView`, but it is still a placeholder and is no
 
 ```text
 Group_Nature_Walk_Project/
+├── .gitignore
 ├── Group_Nature_Walk_Project/
 │   ├── Assets.xcassets/
 │   ├── Model/
@@ -104,6 +105,9 @@ Group_Nature_Walk_Project/
 │   │   └── SessionViewModel.swift
 │   └── Group_Nature_Walk_ProjectApp.swift
 ├── Group_Nature_Walk_Project.xcodeproj/
+│   ├── project.pbxproj
+│   └── project.xcworkspace/
+│       └── contents.xcworkspacedata
 └── README.md
 ```
 
