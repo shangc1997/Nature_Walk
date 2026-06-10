@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SessionView: View {
-    @Bindable var sessionVM: SessionViewModel
+    let sessionVM: SessionViewModel
+    let userVM: UserViewModel
 
     private let appName = "Nature Walk"
 
@@ -16,9 +17,9 @@ struct SessionView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach($sessionVM.sessions) { $session in
+                    ForEach(sessionVM.sessions) { session in
                         NavigationLink {
-                            DetailSessionView(session: $session)
+                            DetailSessionView(session: session, userVM: userVM)
                         } label: {
                             SessionListItem(session: session)
                         }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Session: Codable, Identifiable, Hashable {
-    var id: UUID
+    let id: UUID
 
     var name: String
     var description: String
@@ -17,7 +17,26 @@ struct Session: Codable, Identifiable, Hashable {
     var hostPhoneNumber: String
     var photos: [String]
     var pricePerPerson: Double
-    var isFavorites: Bool
+
+    init(
+        id: ID = UUID(),
+        name: String,
+        description: String,
+        starRating: Double,
+        hostName: String,
+        hostPhoneNumber: String,
+        photos: [String],
+        pricePerPerson: Double
+    ) {
+        self.id = id
+        self.name = name
+        self.description = description
+        self.starRating = starRating
+        self.hostName = hostName
+        self.hostPhoneNumber = hostPhoneNumber
+        self.photos = photos
+        self.pricePerPerson = pricePerPerson
+    }
 }
 
 extension Double {

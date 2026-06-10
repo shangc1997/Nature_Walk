@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DetailSessionView: View {
-    @Binding var session: Session
     @Environment(\.openURL) private var openURL
+    let session: Session
+    let userVM: UserViewModel
 
     var body: some View {
         ScrollView {
@@ -20,6 +21,15 @@ struct DetailSessionView: View {
                         .fontWeight(.bold)
 
                     HStack(spacing: 6) {
+                        Image(systemName: "dollarsign.circle.fill")
+                            .foregroundStyle(.yellow)
+
+                        Text("\(session.pricePerPerson.currencyText) / person")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                    }
+
+                    HStack(spacing: 6) {
                         Image(systemName: "star.fill")
                             .foregroundStyle(.yellow)
 
@@ -27,11 +37,7 @@ struct DetailSessionView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
-
-                    Text("\(session.pricePerPerson.currencyText) / person")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.green)
+                    //.foregroundStyle(.green)
                 }  //VStack end
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -42,9 +48,12 @@ struct DetailSessionView: View {
                     Text("Photos")
                         .font(.headline)
 
-                    //                    HStack(spacing: 12) {
-                    //                        For
-                    //                    }
+                    HStack(spacing: 12) {
+                        ForEach(session.photos.prefix(2), id: \.self) { photo in
+                            SessionPhotoCard(photo: photo)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
                 }  //VStack end
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -92,18 +101,18 @@ struct DetailSessionView: View {
 
                 HStack(spacing: 12) {
                     Button {
-                        session.isFavorites.toggle()
+                        //TODO: Implement
                     } label: {
                         Label(
-                            session.isFavorites
+                            true
                                 ? "Favorites!" : "Add to Favorites",
-                            systemImage: session.isFavorites
+                            systemImage: true
                                 ? "heart.fill" : "heart"
                         )
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                         .background(
-                            session.isFavorites ? Color.red : Color.green
+                            true ? Color.red : Color.green
                         )
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -135,5 +144,55 @@ struct DetailSessionView: View {
 
     private var shareText: String {
         "\(session.name) - \(session.pricePerPerson.currencyText)/person"
+    }
+
+    private struct SessionPhotoCard: View {
+        let photo: String
+
+        var body: some View {
+            Group {
+                if let url = URL(string: photo), photo.hasPrefix("http") {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .empty:
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .fill(Color.gray.opacity(0.15))
+                                ProgressView()
+                            }
+
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFill()
+
+                        case .failure:
+                            placeholder
+
+                        @unknown default:
+                            placeholder
+                        }
+                    }
+                } else {
+                    Image(photo)
+                        .resizable()
+                        .scaledToFill()
+                }
+            }
+            .frame(height: 140)
+            .background(Color.gray.opacity(0.15))
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+        }
+
+        private var placeholder: some View {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.gray.opacity(0.15))
+
+                Image(systemName: "photo")
+                    .font(.title2)
+                    .foregroundStyle(.gray)
+            }
+        }
     }
 }

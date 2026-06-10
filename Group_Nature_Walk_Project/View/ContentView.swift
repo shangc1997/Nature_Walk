@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var sessionVM = SessionViewModel()
+    let sessionVM: SessionViewModel
+    let userVM: UserViewModel
 
     var body: some View {
         TabView {
-            SessionView(sessionVM: sessionVM)
+            SessionView(sessionVM: sessionVM, userVM: userVM)
                 .tabItem {
                     Label("Sessions", systemImage: "map")
                 }
@@ -22,11 +23,10 @@ struct ContentView: View {
                     Label("Favorites", systemImage: "heart.fill")
                 }
 
-            LogoutView()
+            ProfileView()
                 .tabItem {
-                    Label("Logout", systemImage: "person.crop.circle.badge.xmark")
+                    Label("Profile", systemImage: "person.circle.fill")
                 }
         }
-
     }
 }

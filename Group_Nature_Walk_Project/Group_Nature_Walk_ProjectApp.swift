@@ -9,9 +9,17 @@ import SwiftUI
 
 @main
 struct Group_Nature_Walk_ProjectApp: App {
+    @State private var sessionVM = SessionViewModel()
+    @State private var userVM = UserViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            //TODO: Implement correct logic
+            if true {
+                ContentView(sessionVM: sessionVM, userVM: userVM)
+            } else {
+                LoginView()
+            }
         }
     }
 }
