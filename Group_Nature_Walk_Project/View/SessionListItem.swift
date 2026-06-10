@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Renders a compact summary card for a session inside the list view.
 struct SessionListItem: View {
     let session: Session
 

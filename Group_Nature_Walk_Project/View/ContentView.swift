@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Hosts the main tab navigation after the user enters the app.
 struct ContentView: View {
     let sessionVM: SessionViewModel
     let userVM: UserViewModel
@@ -23,6 +24,7 @@ struct ContentView: View {
                     Label("Favorites", systemImage: "heart.fill")
                 }
 
+            // TODO: Pass user data into ProfileView once profile content is implemented.
             ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person.circle.fill")

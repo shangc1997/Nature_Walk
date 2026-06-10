@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Shows the full details for the selected session.
 struct DetailSessionView: View {
     @Environment(\.openURL) private var openURL
     let session: Session
@@ -101,7 +102,7 @@ struct DetailSessionView: View {
 
                 HStack(spacing: 12) {
                     Button {
-                        //TODO: Implement
+                        // TODO: Connect this action to the current user's favorites list.
                     } label: {
                         Label(
                             true
@@ -136,16 +137,19 @@ struct DetailSessionView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
+    /// Builds a phone URL after stripping formatting characters from the number.
     private var phoneURL: URL? {
         let phoneDigits = session.hostPhoneNumber.filter { $0.isNumber }
         guard !phoneDigits.isEmpty else { return nil }
         return URL(string: "tel://\(phoneDigits)")
     }
 
+    /// Text shared through the system share sheet.
     private var shareText: String {
         "\(session.name) - \(session.pricePerPerson.currencyText)/person"
     }
 
+    /// Displays either a remote image URL or a local asset from the session photos array.
     private struct SessionPhotoCard: View {
         let photo: String
 
@@ -184,6 +188,7 @@ struct DetailSessionView: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
 
+        /// Fallback UI shown when an image cannot be loaded.
         private var placeholder: some View {
             ZStack {
                 RoundedRectangle(cornerRadius: 16)

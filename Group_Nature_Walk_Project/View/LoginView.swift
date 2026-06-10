@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+/// Placeholder for the login screen shown before entering the main app.
 struct LoginView: View {
     var body: some View {
-        Text( /*@START_MENU_TOKEN@*/"Hello, World!" /*@END_MENU_TOKEN@*/)
+        // TODO: Build the login form, validation, and remember-me behavior.
+        Text("Login View")
     }
 }

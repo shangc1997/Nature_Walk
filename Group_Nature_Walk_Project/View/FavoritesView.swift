@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+/// Placeholder for the user's favorites list screen.
 struct FavoritesView: View {
     var body: some View {
+        // TODO: Show the current user's favorite sessions and removal actions.
         Text("Favorites View")
     }
 }

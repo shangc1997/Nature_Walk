@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Represents a single nature walk session shown throughout the app.
 struct Session: Codable, Identifiable, Hashable {
     let id: UUID
 
@@ -40,12 +41,14 @@ struct Session: Codable, Identifiable, Hashable {
 }
 
 extension Double {
+    /// Formats a numeric price using Canadian currency formatting.
     var currencyText: String {
         formatted(.currency(code: "CAD"))
     }
 }
 
 extension Session {
+    /// Formats the session's star rating as display text.
     var starRatingText: String {
         String(format: "%.1f / 5", starRating)
     }

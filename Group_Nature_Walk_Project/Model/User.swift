@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Represents a user who can log in and manage a personal favorites list.
 struct User: Codable, Identifiable, Hashable {
     let id: UUID
 

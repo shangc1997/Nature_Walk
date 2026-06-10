@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Displays the list of available sessions and navigates to session details.
 struct SessionView: View {
     let sessionVM: SessionViewModel
     let userVM: UserViewModel

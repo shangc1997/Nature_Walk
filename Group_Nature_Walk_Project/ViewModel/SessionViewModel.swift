@@ -7,10 +7,12 @@
 
 import Foundation
 
+/// Provides the session collection displayed by the sessions tab.
 @Observable
 final class SessionViewModel {
     var sessions: [Session] = sampleSessions
 
+    /// Hard-coded session data.
     static let sampleSessions: [Session] = [
         Session(
             name: "Toronto Food Walking Tour",
