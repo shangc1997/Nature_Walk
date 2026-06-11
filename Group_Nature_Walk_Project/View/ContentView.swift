@@ -19,7 +19,7 @@ struct ContentView: View {
                     Label("Sessions", systemImage: "map")
                 }
 
-            FavoritesView()
+            FavoritesView(sessionVM: sessionVM, userVM: userVM)
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }

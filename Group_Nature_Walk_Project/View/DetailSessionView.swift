@@ -10,7 +10,9 @@ import SwiftUI
 /// Shows the full details for the selected session.
 struct DetailSessionView: View {
     @Environment(\.openURL) private var openURL
+    /// The session currently being displayed.
     let session: Session
+    /// Shared user state used to read and update favorites.
     let userVM: UserViewModel
 
     var body: some View {
@@ -54,7 +56,8 @@ struct DetailSessionView: View {
                         let photoWidth = (proxy.size.width - spacing) / 2
 
                         HStack(spacing: spacing) {
-                            ForEach(session.photos.prefix(2), id: \.self) { photo in
+                            ForEach(session.photos.prefix(2), id: \.self) {
+                                photo in
                                 SessionPhotoCard(photo: photo)
                                     .frame(width: photoWidth, height: 120)
                             }
@@ -108,18 +111,18 @@ struct DetailSessionView: View {
 
                 HStack(spacing: 12) {
                     Button {
-                        // TODO: Connect this action to the current user's favorites list.
+                        userVM.toggleFavorite(sessionID: session.id)
                     } label: {
                         Label(
-                            true
-                                ? "Favorites!" : "Add to Favorites",
-                            systemImage: true
+                            isFavorite
+                                ? "Favorited!" : "Add to Favorites",
+                            systemImage: isFavorite
                                 ? "heart.fill" : "heart"
                         )
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
                         .background(
-                            true ? Color.red : Color.green
+                            isFavorite ? Color.red : Color.green
                         )
                         .foregroundStyle(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -155,8 +158,14 @@ struct DetailSessionView: View {
         "\(session.name) - \(session.pricePerPerson.currencyText)/person"
     }
 
+    /// Whether the displayed session is already in the current user's favorites list.
+    private var isFavorite: Bool {
+        userVM.isFavorite(sessionID: session.id)
+    }
+
     /// Displays either a remote image URL or a local asset from the session photos array.
     private struct SessionPhotoCard: View {
+        /// A remote URL string or local asset name for the session image.
         let photo: String
 
         var body: some View {

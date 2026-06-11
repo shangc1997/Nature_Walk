@@ -33,7 +33,8 @@ final class UserViewModel {
         static let rememberMeEnabled = "rememberMeEnabled"
         static let rememberedEmail = "rememberEmail"
         static let rememberedPassword = "rememberPassword"
-        static let currentLoggedInEmail = "currentLoggedInEmail"
+        static let savedUsers = "savedUsers"
+        static let persistedLoggedInEmail = "persistedLoggedInEmail"
     }
 
     private let defaults: UserDefaults
@@ -46,8 +47,8 @@ final class UserViewModel {
     private(set) var rememberedEmail = ""
     /// The password restored into the login form when Remember Me is enabled.
     private(set) var rememberedPassword = ""
-    /// The most recently authenticated user's email persisted across launches.
-    private(set) var currentLoggedInEmail = ""
+    /// The email address of the most recently authenticated user saved across launches.
+    private(set) var persistedLoggedInEmail = ""
 
     private var usersByID: [User.ID: User] = [:]
     private var userIDByEmail: [String: User.ID] = [:]
@@ -60,15 +61,10 @@ final class UserViewModel {
             defaults.string(forKey: DefaultsKey.rememberedEmail) ?? ""
         rememberedPassword =
             defaults.string(forKey: DefaultsKey.rememberedPassword) ?? ""
-        currentLoggedInEmail =
-            defaults.string(
-                forKey: DefaultsKey.currentLoggedInEmail
-            ) ?? ""
+        persistedLoggedInEmail =
+            defaults.string(forKey: DefaultsKey.persistedLoggedInEmail) ?? ""
 
-        for user in Self.sampleUsers {
-            usersByID[user.id] = user
-            userIDByEmail[user.email.lowercased()] = user.id
-        }
+        loadUser()
     }
 
     /// Returns the active user for the current in-memory session.
@@ -80,6 +76,16 @@ final class UserViewModel {
     /// Indicates whether the app should show the main interface or the login screen.
     var isLoggedIn: Bool {
         currentUser != nil
+    }
+
+    /// The user whose email was most recently persisted as logged in on this device.
+    var persistedLoggedInUser: User? {
+        guard !persistedLoggedInEmail.isEmpty else { return nil }
+        guard let userID = userIDByEmail[persistedLoggedInEmail.lowercased()]
+        else {
+            return nil
+        }
+        return usersByID[userID]
     }
 
     /// Validates credentials, starts an in-memory session, and updates persisted login metadata.
@@ -104,14 +110,14 @@ final class UserViewModel {
 
         currentUserID = user.id
 
-        currentLoggedInEmail = user.email
-        defaults.set(user.email, forKey: DefaultsKey.currentLoggedInEmail)
+        persistedLoggedInEmail = user.email
+        defaults.set(user.email, forKey: DefaultsKey.persistedLoggedInEmail)
 
         rememberMeEnabled = rememberMe
         defaults.set(rememberMe, forKey: DefaultsKey.rememberMeEnabled)
 
         if rememberMe {
-            rememberedEmail = email
+            rememberedEmail = trimmedEmail
             rememberedPassword = password
 
             defaults.set(email, forKey: DefaultsKey.rememberedEmail)
@@ -128,22 +134,105 @@ final class UserViewModel {
     /// Ends the current in-memory session and clears the persisted logged-in identity.
     func logout() {
         currentUserID = nil
-        currentLoggedInEmail = ""
-        defaults.removeObject(forKey: DefaultsKey.currentLoggedInEmail)
+
+        persistedLoggedInEmail = ""
+        defaults.removeObject(forKey: DefaultsKey.persistedLoggedInEmail)
     }
 
-    /// Resolves the last logged-in user from persisted identity data without auto-logging in.
-    var persistedLoggedInUser: User? {
-        guard !currentLoggedInEmail.isEmpty else { return nil }
-        guard let userID = userIDByEmail[currentLoggedInEmail.lowercased()]
-        else {
-            return nil
+    /// Returns whether the active user has already favorited the given session.
+    func isFavorite(sessionID: Session.ID) -> Bool {
+        guard let currentUser else { return false }
+        return currentUser.favoriteSessionIDs.contains(sessionID)
+    }
+
+    /// Adds or removes a session from the active user's favorites, then persists the change.
+    func toggleFavorite(sessionID: Session.ID) {
+        guard let currentUserID, var user = usersByID[currentUserID] else {
+            return
         }
-        return usersByID[userID]
+
+        if user.favoriteSessionIDs.contains(sessionID) {
+            user.favoriteSessionIDs.remove(sessionID)
+        } else {
+            user.favoriteSessionIDs.insert(sessionID)
+        }
+
+        usersByID[currentUserID] = user
+        saveUser()
+    }
+
+    /// Removes one session from the active user's favorites and persists the change.
+    func removeFavorite(sessionID: Session.ID) {
+        guard let currentUserID, var user = usersByID[currentUserID] else {
+            return
+        }
+
+        user.favoriteSessionIDs.remove(sessionID)
+        usersByID[currentUserID] = user
+        saveUser()
+    }
+
+    /// Clears every favorite for the active user and persists the updated user list.
+    func clearFavorites() {
+        guard let currentUserID, var user = usersByID[currentUserID] else {
+            return
+        }
+
+        user.favoriteSessionIDs.removeAll()
+        usersByID[currentUserID] = user
+        saveUser()
+    }
+
+    /// Resolves the active user's favorite session IDs into full session models.
+    func favoriteSessions(from sessions: [Session]) -> [Session] {
+        guard let currentUser else { return [] }
+
+        return sessions.filter { session in
+            currentUser.favoriteSessionIDs.contains(session.id)
+        }
+    }
+
+    /// Restores persisted users from UserDefaults or falls back to the bundled sample users.
+    private func loadUser() {
+        if let data = defaults.data(forKey: DefaultsKey.savedUsers),
+            let savedUser = try? JSONDecoder().decode([User].self, from: data),
+            !savedUser.isEmpty
+        {
+            configureUser(savedUser)
+        } else {
+            configureUser(Self.sampleUsers)
+            saveUser()
+        }
+    }
+
+    /// Rebuilds the in-memory lookup tables used by login and favorites operations.
+    private func configureUser(_ users: [User]) {
+        usersByID.removeAll()
+        userIDByEmail.removeAll()
+
+        for user in users {
+            usersByID[user.id] = user
+            userIDByEmail[user.email.lowercased()] = user.id
+        }
+    }
+
+    /// Persists the current user collection, including each user's favorites list.
+    private func saveUser() {
+        let users = Array(usersByID.values).sorted { $0.email < $1.email }
+
+        guard let data = try? JSONEncoder().encode(users) else {
+            return
+        }
+
+        defaults.set(data, forKey: DefaultsKey.savedUsers)
     }
 
     static let sampleUsers: [User] = [
-        User(name: "Test User", email: "test@gmail.com", password: "test123"),
+        User(
+            name: "Test User",
+            email: "test@gmail.com",
+            password: "test123"
+        ),
         User(
             name: "Admin User",
             email: "admin@gmail.com",
