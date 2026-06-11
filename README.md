@@ -1,15 +1,13 @@
 # Group Nature Walk Project
 
-Group Nature Walk Project is a SwiftUI iOS group assignment for the Introduction to iOS Development course.
+Group Nature Walk Project is a SwiftUI iOS group assignment for the Introduction to iOS Development course. The app lets:
 
-The app is being built to allow users to:
-
-- log in with an email address and password
-- browse available nature walk sessions
-- open a detail page for each session
-- contact the guide or organization by phone number
-- share session information
-- manage a favorites list
+- Users sign in
+- Browse available group sessions
+- View session details
+- Contact the host
+- Share session information
+- Manage a personal favorites list
 
 ## Team Members
 
@@ -21,77 +19,77 @@ The app is being built to allow users to:
 - Course Name: Introduction to iOS Development
 - Semester: Spring/Summer 2026
 
-## Project Summary
+## Project Overview
 
-The current app is structured around a tab-based interface in `ContentView` with three main areas:
+The app starts on `LoginView` and moves into a tab-based main interface after a successful login. The main interface is built in `ContentView` and contains three sections:
 
 - `SessionView`
 - `FavoritesView`
 - `ProfileView`
 
-The project also includes a `LoginView`, but it is still a placeholder and is not yet connected to the app launch flow. A `User` model and `UserViewModel` have been added to prepare for login and user-specific favorites.
+The project currently uses hard-coded sample users and sessions to demonstrate the required app flow.
 
 ## Current Features
 
-### Completed
+### Login Flow
 
-- Main screen in `ContentView`
-  - Includes 3 tabs: `SessionView`, `FavoritesView`, and `ProfileView`
-- Session list screen in `SessionView`
-  - Displays available nature walk sessions
-  - Shows session photo, name, and price per person
-  - Navigates to `DetailSessionView` when a session is selected
-- Session details screen in `DetailSessionView`
-  - Displays the chosen session name
-  - Displays price per person
-  - Displays star rating
-  - Displays 2 photos
-  - Displays description
-  - Displays host / organization name
-  - Displays host phone number
-  - Opens the phone dialer when the phone number is tapped
-  - Opens the iOS sharing widget and shares the session name and price
-- Sample session data managed by `SessionViewModel`
-- Sample user data managed by `UserViewModel`
-- `User` model created with name, email, password, and favorite session IDs
+- Login screen with email and password fields
+- Remember Me toggle
+- Validation for empty email and password fields
+- Two sample accounts for authentication:
+  - `test@gmail.com` / `test123`
+  - `admin@gmail.com` / `admin123`
+- App launches to the login screen
+- Remembered credentials are restored on launch when Remember Me was enabled
+- Remember Me does not auto-enter the main app
+- Logout returns the user to the login screen
 
-### In Progress
+### Sessions
 
-- Session details screen in `DetailSessionView`
-  - Block 1 completed: name, star rating, and price per person
-  - Block 2 completed: 2 photos
-  - Block 3 completed: description
-  - Block 4 completed: host / organization name and phone number
-  - Block 5 completed: favorites button and share button UI
-  - Favorites button behavior is not completed yet
-- App launch flow
-  - `Group_Nature_Walk_ProjectApp` now holds both `SessionViewModel` and `UserViewModel`
-  - Login routing logic is still TODO
+- Session list screen built in `SessionView`
+- At least 3 hard-coded sessions managed by `SessionViewModel`
+- Each list item shows:
+  - session photo
+  - session name
+  - price per person
+- Tapping a session opens `DetailSessionView`
 
-### Planned / TODO
+### Session Details
 
-- `LoginView`
-  - Build the actual login screen
-  - Add form validation
-  - Add a Remember Me checkbox
-  - Auto-fill email and password if Remember Me was selected
-  - Navigate to `ContentView` after successful login
-- `FavoritesView`
-  - View the favorites list
-  - Remove a single favorited session
-  - Remove all favorited sessions
-- `ProfileView`
-  - Display user information
-  - Add a logout button
-  - Return the user to the login screen
+- Session name
+- Price per person
+- Star rating
+- Two photos
+- Session description
+- Guide / organization name
+- Host phone number
+- Tap-to-call behavior using the iOS phone dialer
+- Share sheet support for sharing the session name and price
+- Add to Favorites / Favorited button state
 
-## Screens
+### Favorites
 
-- `LoginView` (placeholder)
-- `SessionView`
-- `DetailSessionView` (in progress)
-- `FavoritesView` (placeholder)
-- `ProfileView` (placeholder)
+- User-specific favorites list in `FavoritesView`
+- Add and remove favorites from the detail screen
+- Remove a single favorite with swipe actions
+- Remove all favorites with the toolbar action
+- Favorites are filtered by the currently logged-in user
+
+### Profile
+
+- Displays the current user's name and email
+- Logout button
+
+## Data Persistence
+
+The app uses `UserDefaults` to persist:
+
+- Remember Me state
+- Remembered email
+- Remembered password
+- Saved user data
+- Each user's favorite session IDs
+- The most recently persisted logged-in user identity
 
 ## Technologies Used
 
@@ -139,7 +137,7 @@ Group_Nature_Walk_Project/
 
 ## Development Notes
 
-- The app currently launches directly into `ContentView`
-- Session data is hard-coded in `SessionViewModel`
-- User data is currently hard-coded in `UserViewModel`
-- Update this README when new features are completed.
+- Session data is currently hard-coded in `SessionViewModel`
+- Sample user accounts are currently defined in `UserViewModel`
+- Favorites persistence depends on stable session IDs in the sample data
+- Remember Me data is stored locally for coursework demonstration purposes
