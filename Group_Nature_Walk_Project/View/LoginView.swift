@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Placeholder for the login screen shown before entering the main app.
+/// Presents the login form and restores remembered credentials when enabled.
 struct LoginView: View {
     let userVM: UserViewModel
 

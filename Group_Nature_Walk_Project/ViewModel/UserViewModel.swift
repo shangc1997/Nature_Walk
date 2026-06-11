@@ -8,9 +8,9 @@
 import Foundation
 import Observation
 
+/// Describes validation and authentication failures shown on the login screen.
 enum AuthError: LocalizedError {
     case emptyEmail
-    case invalidEmail
     case emptyPassword
     case invalidCredentials
 
@@ -18,8 +18,6 @@ enum AuthError: LocalizedError {
         switch self {
         case .emptyEmail:
             return "Please enter your email."
-        case .invalidEmail:
-            return "Please enter a valid email address."
         case .emptyPassword:
             return "Please enter your password."
         case .invalidCredentials:
@@ -28,22 +26,28 @@ enum AuthError: LocalizedError {
     }
 }
 
-/// Stores user data used for login and user-specific features.
+/// Manages login state, remembered credentials, and the last logged-in user identity.
 @Observable
 final class UserViewModel {
-    // TODO: Add current-user state, login validation, and favorites mutations.
     private enum DefaultsKey {
         static let rememberMeEnabled = "rememberMeEnabled"
         static let rememberedEmail = "rememberEmail"
         static let rememberedPassword = "rememberPassword"
+        static let currentLoggedInEmail = "currentLoggedInEmail"
     }
 
     private let defaults: UserDefaults
 
+    /// The in-memory user session for the current app launch.
     private(set) var currentUserID: User.ID?
+    /// Whether the login form should restore saved credentials on launch.
     private(set) var rememberMeEnabled = false
+    /// The email restored into the login form when Remember Me is enabled.
     private(set) var rememberedEmail = ""
+    /// The password restored into the login form when Remember Me is enabled.
     private(set) var rememberedPassword = ""
+    /// The most recently authenticated user's email persisted across launches.
+    private(set) var currentLoggedInEmail = ""
 
     private var usersByID: [User.ID: User] = [:]
     private var userIDByEmail: [String: User.ID] = [:]
@@ -56,6 +60,10 @@ final class UserViewModel {
             defaults.string(forKey: DefaultsKey.rememberedEmail) ?? ""
         rememberedPassword =
             defaults.string(forKey: DefaultsKey.rememberedPassword) ?? ""
+        currentLoggedInEmail =
+            defaults.string(
+                forKey: DefaultsKey.currentLoggedInEmail
+            ) ?? ""
 
         for user in Self.sampleUsers {
             usersByID[user.id] = user
@@ -63,25 +71,24 @@ final class UserViewModel {
         }
     }
 
+    /// Returns the active user for the current in-memory session.
     var currentUser: User? {
         guard let currentUserID else { return nil }
         return usersByID[currentUserID]
     }
 
+    /// Indicates whether the app should show the main interface or the login screen.
     var isLoggedIn: Bool {
         currentUser != nil
     }
 
+    /// Validates credentials, starts an in-memory session, and updates persisted login metadata.
     func login(email: String, password: String, rememberMe: Bool) throws {
         let trimmedEmail = email.trimmingCharacters(in: .whitespacesAndNewlines)
         let normalizedEmail = trimmedEmail.lowercased()
 
         guard !trimmedEmail.isEmpty else {
             throw AuthError.emptyEmail
-        }
-
-        guard isValidEmail(trimmedEmail) else {
-            throw AuthError.invalidEmail
         }
 
         guard !password.isEmpty else {
@@ -96,14 +103,18 @@ final class UserViewModel {
         }
 
         currentUserID = user.id
+
+        currentLoggedInEmail = user.email
+        defaults.set(user.email, forKey: DefaultsKey.currentLoggedInEmail)
+
         rememberMeEnabled = rememberMe
         defaults.set(rememberMe, forKey: DefaultsKey.rememberMeEnabled)
 
         if rememberMe {
-            rememberedEmail = trimmedEmail
+            rememberedEmail = email
             rememberedPassword = password
 
-            defaults.set(trimmedEmail, forKey: DefaultsKey.rememberedEmail)
+            defaults.set(email, forKey: DefaultsKey.rememberedEmail)
             defaults.set(password, forKey: DefaultsKey.rememberedPassword)
         } else {
             rememberedEmail = ""
@@ -112,16 +123,23 @@ final class UserViewModel {
             defaults.removeObject(forKey: DefaultsKey.rememberedEmail)
             defaults.removeObject(forKey: DefaultsKey.rememberedPassword)
         }
-
     }
 
+    /// Ends the current in-memory session and clears the persisted logged-in identity.
     func logout() {
         currentUserID = nil
+        currentLoggedInEmail = ""
+        defaults.removeObject(forKey: DefaultsKey.currentLoggedInEmail)
     }
 
-    private func isValidEmail(_ email: String) -> Bool {
-        let pattern = #"^\S+@\S+\.\S+$"#
-        return email.range(of: pattern, options: .regularExpression) != nil
+    /// Resolves the last logged-in user from persisted identity data without auto-logging in.
+    var persistedLoggedInUser: User? {
+        guard !currentLoggedInEmail.isEmpty else { return nil }
+        guard let userID = userIDByEmail[currentLoggedInEmail.lowercased()]
+        else {
+            return nil
+        }
+        return usersByID[userID]
     }
 
     static let sampleUsers: [User] = [

@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-/// Root app entry point that decides which top-level screen to show.
+/// Root app entry point that switches between the login flow and the main tab interface.
 struct Group_Nature_Walk_ProjectApp: App {
     @State private var sessionVM = SessionViewModel()
     @State private var userVM = UserViewModel()
