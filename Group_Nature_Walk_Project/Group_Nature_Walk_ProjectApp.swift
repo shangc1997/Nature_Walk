@@ -15,11 +15,10 @@ struct Group_Nature_Walk_ProjectApp: App {
 
     var body: some Scene {
         WindowGroup {
-            // TODO: Route between LoginView and ContentView using real login state.
-            if true {
+            if userVM.isLoggedIn {
                 ContentView(sessionVM: sessionVM, userVM: userVM)
             } else {
-                LoginView()
+                LoginView(userVM: userVM)
             }
         }
     }

@@ -24,8 +24,7 @@ struct ContentView: View {
                     Label("Favorites", systemImage: "heart.fill")
                 }
 
-            // TODO: Pass user data into ProfileView once profile content is implemented.
-            ProfileView()
+            ProfileView(userVM: userVM)
                 .tabItem {
                     Label("Profile", systemImage: "person.circle.fill")
                 }

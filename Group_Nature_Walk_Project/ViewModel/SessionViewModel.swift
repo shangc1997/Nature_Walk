@@ -22,8 +22,8 @@ final class SessionViewModel {
             hostName: "Toronto Local Guides",
             hostPhoneNumber: "416-555-1010",
             photos: [
-                "https://images.openai.com/static-rsc-4/zTv-H0s8erLZvoE1j7sqXqYTckCqL-39_h22hjmeB_KLnDYe-8snUsHe5I6n8LUEVVWJ_a09govyshRT2j7l_W4GY70fOFwSvV3-zn81mvvkRZJnMK40D_mSisWz1MFHMJuRWrMv5HLme8_aRrlvTw_44sxtttmZGfbgj_GG5xM?purpose=inline",
-                "foodTour2",
+                "https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+                "https://images.unsplash.com/photo-1555396273-367ea4eb4db5",
             ],
             pricePerPerson: 45.00
         ),
@@ -34,7 +34,10 @@ final class SessionViewModel {
             starRating: 4.6,
             hostName: "Ontario Travel Group",
             hostPhoneNumber: "905-555-2020",
-            photos: ["niagara1", "niagara2"],
+            photos: [
+                "https://upload.wikimedia.org/wikipedia/commons/0/06/Niagara_Falls_from_USA.jpg",
+                "https://images.unsplash.com/photo-1511497584788-876760111969",
+            ],
             pricePerPerson: 89.99
         ),
         Session(
@@ -44,7 +47,10 @@ final class SessionViewModel {
             starRating: 4.7,
             hostName: "Harbour Tours Toronto",
             hostPhoneNumber: "647-555-3030",
-            photos: ["cruise1", "cruise2"],
+            photos: [
+                "https://images.unsplash.com/photo-1517935706615-2717063c2225",
+                "https://images.unsplash.com/photo-1514924013411-cbf25faa35bb",
+            ],
             pricePerPerson: 59.99
         ),
     ]

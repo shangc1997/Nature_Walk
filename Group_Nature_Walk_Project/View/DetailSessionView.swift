@@ -49,12 +49,18 @@ struct DetailSessionView: View {
                     Text("Photos")
                         .font(.headline)
 
-                    HStack(spacing: 12) {
-                        ForEach(session.photos.prefix(2), id: \.self) { photo in
-                            SessionPhotoCard(photo: photo)
-                                .frame(maxWidth: .infinity)
+                    GeometryReader { proxy in
+                        let spacing: CGFloat = 12
+                        let photoWidth = (proxy.size.width - spacing) / 2
+
+                        HStack(spacing: spacing) {
+                            ForEach(session.photos.prefix(2), id: \.self) { photo in
+                                SessionPhotoCard(photo: photo)
+                                    .frame(width: photoWidth, height: 120)
+                            }
                         }
                     }
+                    .frame(height: 120)
                 }  //VStack end
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -183,7 +189,7 @@ struct DetailSessionView: View {
                         .scaledToFill()
                 }
             }
-            .frame(height: 140)
+            .clipped()
             .background(Color.gray.opacity(0.15))
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }

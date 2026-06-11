@@ -7,10 +7,31 @@
 
 import SwiftUI
 
-/// Placeholder for the user's profile and logout screen.
 struct ProfileView: View {
+    let userVM: UserViewModel
+
     var body: some View {
-        // TODO: Display user info and a logout action.
-        Text("Profile View")
+        NavigationStack {
+            VStack(spacing: 20) {
+                if let currentUser = userVM.currentUser {
+                    Text(currentUser.name)
+                        .font(.title2)
+                        .fontWeight(.bold)
+
+                    Text(currentUser.email)
+                        .foregroundStyle(.secondary)
+                }
+
+                Button("Logout", role: .destructive) {
+                    userVM.logout()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
