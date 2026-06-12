@@ -12,6 +12,9 @@ struct FavoritesView: View {
     let sessionVM: SessionViewModel
     let userVM: UserViewModel
 
+    @State private var sessionToDelete: Session?
+    @State private var showRemoveAllAlert = false
+
     /// Resolves the current user's favorite session IDs into full session models.
     private var favoriteSessions: [Session] {
         userVM.favoriteSessions(from: sessionVM.sessions)
@@ -41,7 +44,7 @@ struct FavoritesView: View {
                             }
                             .swipeActions {
                                 Button("Remove", role: .destructive) {
-                                    userVM.removeFavorite(sessionID: session.id)
+                                    sessionToDelete = session
                                 }
                             }
                         }
@@ -53,10 +56,47 @@ struct FavoritesView: View {
             .toolbar {
                 if !favoriteSessions.isEmpty {
                     Button("Remove All", role: .destructive) {
-                        userVM.clearFavorites()
+                        showRemoveAllAlert = true
                     }
                 }
             }
+            .alert("Remove Favorite?", isPresented: showDeleteAlert) {
+                Button("Cancel", role: .cancel) {
+                    sessionToDelete = nil
+                }
+
+                Button("Remove", role: .destructive) {
+                    if let sessionToDelete {
+                        userVM.removeFavorite(sessionID: sessionToDelete.id)
+                    }
+                    sessionToDelete = nil
+                }
+            } message: {
+                Text(
+                    "Are you sure you want to remove this session from favorites?"
+                )
+            }
+            .alert("Remove All Favorites?", isPresented: $showRemoveAllAlert) {
+                Button("Cancel", role: .cancel) {}
+                Button("Remove All", role: .destructive) {
+                    userVM.clearFavorites()
+                }
+            } message: {
+                Text(
+                    "Are you sure you want to remove ALL sessions from favorites?"
+                )
+            }
         }  //NavigationStack end
+    }
+
+    private var showDeleteAlert: Binding<Bool> {
+        Binding(
+            get: { sessionToDelete != nil },
+            set: { newValue in
+                if !newValue {
+                    sessionToDelete = nil
+                }
+            }
+        )
     }
 }

@@ -38,8 +38,8 @@ final class SessionViewModel {
             hostName: "Ontario Travel Group",
             hostPhoneNumber: "905-555-2020",
             photos: [
-                "https://upload.wikimedia.org/wikipedia/commons/0/06/Niagara_Falls_from_USA.jpg",
-                "https://images.unsplash.com/photo-1511497584788-876760111969",
+                "https://mediaim.expedia.com/localexpert/1344001/32202543-d7e2-4eea-84c9-eb5d07853cd2.jpg?impolicy=resizecrop&rw=1005&rh=565",
+                "https://livinlifewithlori.com/wp-content/uploads/2020/09/One-Day-Trip-To-Niagara-Falls-New-York.jpeg",
             ],
             pricePerPerson: 89.99
         ),

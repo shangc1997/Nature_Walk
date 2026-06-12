@@ -11,6 +11,8 @@ import SwiftUI
 struct ProfileView: View {
     let userVM: UserViewModel
 
+    @State private var showLogoutAlert = false
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
@@ -24,7 +26,7 @@ struct ProfileView: View {
                 }
 
                 Button("Logout", role: .destructive) {
-                    userVM.logout()
+                    showLogoutAlert = true
                 }
                 .buttonStyle(.borderedProminent)
 
@@ -33,6 +35,14 @@ struct ProfileView: View {
             .padding()
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
+            .alert("Logout?", isPresented: $showLogoutAlert) {
+                Button("Cancel", role: .cancel) {}
+                Button("Logout", role: .destructive) {
+                    userVM.logout()
+                }
+            } message: {
+                Text("Are you sure you want to log out?")
+            }
         }
     }
 }
