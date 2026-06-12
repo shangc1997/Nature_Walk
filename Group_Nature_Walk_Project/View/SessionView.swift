@@ -9,8 +9,7 @@ import SwiftUI
 
 /// Displays the list of available sessions and navigates to session details.
 struct SessionView: View {
-    let sessionVM: SessionViewModel
-    let userVM: UserViewModel
+    @Environment(SessionViewModel.self) private var sessionVM
 
     private let appName = "Nature Walk"
 
@@ -20,7 +19,7 @@ struct SessionView: View {
                 Section {
                     ForEach(sessionVM.sessions) { session in
                         NavigationLink {
-                            DetailSessionView(session: session, userVM: userVM)
+                            DetailSessionView(session: session)
                         } label: {
                             SessionListItem(session: session)
                         }

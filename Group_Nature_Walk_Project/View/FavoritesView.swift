@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Displays the current user's saved favorites and supports removing them.
 struct FavoritesView: View {
-    let sessionVM: SessionViewModel
-    let userVM: UserViewModel
+    @Environment(SessionViewModel.self) private var sessionVM
+    @Environment(UserViewModel.self) private var userVM
 
     @State private var sessionToDelete: Session?
     @State private var showRemoveAllAlert = false
@@ -36,8 +36,7 @@ struct FavoritesView: View {
                         ForEach(favoriteSessions) { session in
                             NavigationLink {
                                 DetailSessionView(
-                                    session: session,
-                                    userVM: userVM
+                                    session: session
                                 )
                             } label: {
                                 SessionListItem(session: session)

@@ -10,10 +10,10 @@ import SwiftUI
 /// Shows the full details for the selected session.
 struct DetailSessionView: View {
     @Environment(\.openURL) private var openURL
+    @Environment(UserViewModel.self) private var userVM
+
     /// The session currently being displayed.
     let session: Session
-    /// Shared user state used to read and update favorites.
-    let userVM: UserViewModel
 
     var body: some View {
         ScrollView {

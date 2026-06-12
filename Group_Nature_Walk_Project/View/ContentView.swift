@@ -9,22 +9,19 @@ import SwiftUI
 
 /// Hosts the main tab navigation after the user enters the app.
 struct ContentView: View {
-    let sessionVM: SessionViewModel
-    let userVM: UserViewModel
-
     var body: some View {
         TabView {
-            SessionView(sessionVM: sessionVM, userVM: userVM)
+            SessionView()
                 .tabItem {
                     Label("Sessions", systemImage: "map")
                 }
 
-            FavoritesView(sessionVM: sessionVM, userVM: userVM)
+            FavoritesView()
                 .tabItem {
                     Label("Favorites", systemImage: "heart.fill")
                 }
 
-            ProfileView(userVM: userVM)
+            ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person.circle.fill")
                 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Shows the currently logged-in user's basic info and provides a logout action.
 struct ProfileView: View {
-    let userVM: UserViewModel
+    @Environment(UserViewModel.self) private var userVM
 
     @State private var showLogoutAlert = false
 

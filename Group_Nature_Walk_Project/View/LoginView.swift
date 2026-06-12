@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Presents the login form and restores remembered credentials when enabled.
 struct LoginView: View {
-    let userVM: UserViewModel
+    @Environment(UserViewModel.self) private var userVM
 
     @State private var email = ""
     @State private var password = ""

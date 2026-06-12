@@ -15,11 +15,15 @@ struct Group_Nature_Walk_ProjectApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if userVM.isLoggedIn {
-                ContentView(sessionVM: sessionVM, userVM: userVM)
-            } else {
-                LoginView(userVM: userVM)
+            Group {
+                if userVM.isLoggedIn {
+                    ContentView()
+                } else {
+                    LoginView()
+                }
             }
+            .environment(sessionVM)
+            .environment(userVM)
         }
     }
 }

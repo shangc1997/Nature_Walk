@@ -120,7 +120,7 @@ final class UserViewModel {
             rememberedEmail = trimmedEmail
             rememberedPassword = password
 
-            defaults.set(email, forKey: DefaultsKey.rememberedEmail)
+            defaults.set(trimmedEmail, forKey: DefaultsKey.rememberedEmail)
             defaults.set(password, forKey: DefaultsKey.rememberedPassword)
         } else {
             rememberedEmail = ""
