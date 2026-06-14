@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		EA8B11DB2FDE3BE4002AA235 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 104BB02B2FD7B7AD00FE5677 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 104BB0322FD7B7AD00FE5677;
+			remoteInfo = Group_Nature_Walk_Project;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		104BB0332FD7B7AD00FE5677 /* Group_Nature_Walk_Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Group_Nature_Walk_Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA8B11D72FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Group_Nature_Walk_ProjectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +27,22 @@
 			path = Group_Nature_Walk_Project;
 			sourceTree = "<group>";
 		};
+		EA8B11D82FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Group_Nature_Walk_ProjectTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		104BB0302FD7B7AD00FE5677 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA8B11D42FDE3BE4002AA235 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				104BB0352FD7B7AD00FE5677 /* Group_Nature_Walk_Project */,
+				EA8B11D82FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests */,
 				104BB0342FD7B7AD00FE5677 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				104BB0332FD7B7AD00FE5677 /* Group_Nature_Walk_Project.app */,
+				EA8B11D72FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -70,6 +95,29 @@
 			productReference = 104BB0332FD7B7AD00FE5677 /* Group_Nature_Walk_Project.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EA8B11D62FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EA8B11DF2FDE3BE4002AA235 /* Build configuration list for PBXNativeTarget "Group_Nature_Walk_ProjectTests" */;
+			buildPhases = (
+				EA8B11D32FDE3BE4002AA235 /* Sources */,
+				EA8B11D42FDE3BE4002AA235 /* Frameworks */,
+				EA8B11D52FDE3BE4002AA235 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EA8B11DC2FDE3BE4002AA235 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EA8B11D82FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests */,
+			);
+			name = Group_Nature_Walk_ProjectTests;
+			packageProductDependencies = (
+			);
+			productName = Group_Nature_Walk_ProjectTests;
+			productReference = EA8B11D72FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -82,6 +130,10 @@
 				TargetAttributes = {
 					104BB0322FD7B7AD00FE5677 = {
 						CreatedOnToolsVersion = 26.5;
+					};
+					EA8B11D62FDE3BE4002AA235 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 104BB0322FD7B7AD00FE5677;
 					};
 				};
 			};
@@ -100,12 +152,20 @@
 			projectRoot = "";
 			targets = (
 				104BB0322FD7B7AD00FE5677 /* Group_Nature_Walk_Project */,
+				EA8B11D62FDE3BE4002AA235 /* Group_Nature_Walk_ProjectTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		104BB0312FD7B7AD00FE5677 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA8B11D52FDE3BE4002AA235 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +182,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EA8B11D32FDE3BE4002AA235 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EA8B11DC2FDE3BE4002AA235 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 104BB0322FD7B7AD00FE5677 /* Group_Nature_Walk_Project */;
+			targetProxy = EA8B11DB2FDE3BE4002AA235 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		104BB03C2FD7B7AE00FE5677 /* Debug */ = {
@@ -306,6 +381,46 @@
 			};
 			name = Release;
 		};
+		EA8B11DD2FDE3BE4002AA235 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "y.Group-Nature-Walk-ProjectTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Group_Nature_Walk_Project.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Group_Nature_Walk_Project";
+			};
+			name = Debug;
+		};
+		EA8B11DE2FDE3BE4002AA235 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "y.Group-Nature-Walk-ProjectTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Group_Nature_Walk_Project.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Group_Nature_Walk_Project";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -323,6 +438,15 @@
 			buildConfigurations = (
 				104BB03F2FD7B7AE00FE5677 /* Debug */,
 				104BB0402FD7B7AE00FE5677 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EA8B11DF2FDE3BE4002AA235 /* Build configuration list for PBXNativeTarget "Group_Nature_Walk_ProjectTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA8B11DD2FDE3BE4002AA235 /* Debug */,
+				EA8B11DE2FDE3BE4002AA235 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
