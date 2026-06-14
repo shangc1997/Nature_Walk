@@ -40,7 +40,6 @@ struct DetailSessionView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
-                    //.foregroundStyle(.green)
                 }  //VStack end
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -174,11 +173,7 @@ struct DetailSessionView: View {
                     AsyncImage(url: url) { phase in
                         switch phase {
                         case .empty:
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.gray.opacity(0.15))
-                                ProgressView()
-                            }
+                            ProgressView()
 
                         case .success(let image):
                             image
@@ -205,14 +200,9 @@ struct DetailSessionView: View {
 
         /// Fallback UI shown when an image cannot be loaded.
         private var placeholder: some View {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.gray.opacity(0.15))
-
-                Image(systemName: "photo")
-                    .font(.title2)
-                    .foregroundStyle(.gray)
-            }
+            Image(systemName: "photo")
+                .font(.title2)
+                .foregroundStyle(.gray)
         }
     }
 }
