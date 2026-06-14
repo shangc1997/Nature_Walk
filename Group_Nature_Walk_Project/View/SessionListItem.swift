@@ -24,14 +24,12 @@ struct SessionListItem: View {
                         .scaledToFill()
 
                 case .failure:
-                    Image(systemName: "photo")
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                        .foregroundStyle(.gray)
+                    placeholder
 
+                // 与 .failure 共用占位图:以后 SwiftUI 新增 phase 时也不会出现空白格
+                // (原来这里是 EmptyView)。
                 @unknown default:
-                    EmptyView()
+                    placeholder
                 }
             }
             .frame(width: 100, height: 80)
@@ -60,5 +58,14 @@ struct SessionListItem: View {
         }
         .padding()
         .cornerRadius(16)
+    }
+
+    /// Fallback thumbnail shown when the session photo fails to load.
+    private var placeholder: some View {
+        Image(systemName: "photo")
+            .resizable()
+            .scaledToFit()
+            .padding()
+            .foregroundStyle(.gray)
     }
 }

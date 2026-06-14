@@ -53,8 +53,10 @@ final class UserViewModel {
     private var usersByID: [User.ID: User] = [:]
     private var userIDByEmail: [String: User.ID] = [:]
 
-    init() {
-        defaults = UserDefaults.standard
+    // 依赖注入点:默认 .standard(生产代码 UserViewModel() 不受影响),
+    // 单元测试时可注入隔离的 UserDefaults(suiteName:),避免污染真实磁盘数据。
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
 
         rememberMeEnabled = defaults.bool(forKey: DefaultsKey.rememberMeEnabled)
         rememberedEmail =
@@ -194,15 +196,22 @@ final class UserViewModel {
 
     /// Restores persisted users from UserDefaults or falls back to the bundled sample users.
     private func loadUser() {
-        if let data = defaults.data(forKey: DefaultsKey.savedUsers),
-            let savedUser = try? JSONDecoder().decode([User].self, from: data),
-            !savedUser.isEmpty
-        {
-            configureUser(savedUser)
-        } else {
-            configureUser(Self.sampleUsers)
-            saveUser()
+        if let data = defaults.data(forKey: DefaultsKey.savedUsers) {
+            do {
+                let savedUsers = try JSONDecoder().decode([User].self, from: data)
+                if !savedUsers.isEmpty {
+                    configureUser(savedUsers)
+                    return
+                }
+            } catch {
+                // 解码失败时回退到示例用户(下方),保证 app 仍可用。
+                // Future improve:目前仅 print,可换成 os.Logger 或上报,便于线上排查。
+                print("UserViewModel: failed to decode saved users: \(error)")
+            }
         }
+
+        configureUser(Self.sampleUsers)
+        saveUser()
     }
 
     /// Rebuilds the in-memory lookup tables used by login and favorites operations.
@@ -220,11 +229,14 @@ final class UserViewModel {
     private func saveUser() {
         let users = Array(usersByID.values).sorted { $0.email < $1.email }
 
-        guard let data = try? JSONEncoder().encode(users) else {
-            return
+        do {
+            let data = try JSONEncoder().encode(users)
+            defaults.set(data, forKey: DefaultsKey.savedUsers)
+        } catch {
+            // 原来用 try? 会把错误静默吞掉(收藏存不上但 UI 无任何提示)。
+            // Future improve:可换 os.Logger,或在收藏失败时给用户一个轻提示。
+            print("UserViewModel: failed to encode users: \(error)")
         }
-
-        defaults.set(data, forKey: DefaultsKey.savedUsers)
     }
 
     static let sampleUsers: [User] = [
