@@ -86,9 +86,6 @@ struct LoginView: View {
                 if userVM.rememberMeEnabled {
                     email = userVM.rememberedEmail
                     password = userVM.rememberedPassword
-                } else {
-                    email = ""
-                    password = ""
                 }
             }
         }  //NavigationStack end

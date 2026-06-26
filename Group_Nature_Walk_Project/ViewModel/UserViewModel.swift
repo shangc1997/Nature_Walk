@@ -147,38 +147,32 @@ final class UserViewModel {
 
     /// Adds or removes a session from the active user's favorites, then persists the change.
     func toggleFavorite(sessionID: Session.ID) {
-        guard let currentUserID, var user = usersByID[currentUserID] else {
-            return
+        updateCurrentUser { user in
+            if user.favoriteSessionIDs.contains(sessionID) {
+                user.favoriteSessionIDs.remove(sessionID)
+            } else {
+                user.favoriteSessionIDs.insert(sessionID)
+            }
         }
-
-        if user.favoriteSessionIDs.contains(sessionID) {
-            user.favoriteSessionIDs.remove(sessionID)
-        } else {
-            user.favoriteSessionIDs.insert(sessionID)
-        }
-
-        usersByID[currentUserID] = user
-        saveUser()
     }
 
     /// Removes one session from the active user's favorites and persists the change.
     func removeFavorite(sessionID: Session.ID) {
-        guard let currentUserID, var user = usersByID[currentUserID] else {
-            return
-        }
-
-        user.favoriteSessionIDs.remove(sessionID)
-        usersByID[currentUserID] = user
-        saveUser()
+        updateCurrentUser { $0.favoriteSessionIDs.remove(sessionID) }
     }
 
     /// Clears every favorite for the active user and persists the updated user list.
     func clearFavorites() {
+        updateCurrentUser { $0.favoriteSessionIDs.removeAll() }
+    }
+
+    /// Applies a mutation to the active user in place and persists the updated user list.
+    private func updateCurrentUser(_ mutate: (inout User) -> Void) {
         guard let currentUserID, var user = usersByID[currentUserID] else {
             return
         }
 
-        user.favoriteSessionIDs.removeAll()
+        mutate(&user)
         usersByID[currentUserID] = user
         saveUser()
     }
