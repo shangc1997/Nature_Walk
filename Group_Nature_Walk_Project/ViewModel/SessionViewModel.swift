@@ -11,7 +11,13 @@ import Foundation
 @Observable
 final class SessionViewModel {
     /// The session list currently rendered by the app.
-    var sessions: [Session] = sampleSessions
+    var sessions: [Session]
+
+    // 依赖注入点:默认仍用 sampleSessions(生产代码 SessionViewModel() 不受影响),
+    // 单元测试 / SwiftUI 预览时可注入自定义会话数据,不依赖写死的静态常量。
+    init(sessions: [Session] = sampleSessions) {
+        self.sessions = sessions
+    }
 
     /// Hard-coded session data with stable IDs so favorite mappings persist across launches.
     static let sampleSessions: [Session] = [

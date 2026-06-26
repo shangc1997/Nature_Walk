@@ -54,10 +54,14 @@ struct LoginView: View {
                                 rememberMe: rememberMe
                             )
                             errorMessage = ""
-                        } catch {
+                        } catch let error as AuthError {
+                            // login 目前只会抛 AuthError,直接拿它的本地化文案,
+                            // 比原来的 (error as? LocalizedError) 类型擦除更直观。
                             errorMessage =
-                                (error as? LocalizedError)?.errorDescription
-                                ?? "Login failed."
+                                error.errorDescription ?? "Login failed."
+                        } catch {
+                            // 兜底:防止以后 login 抛出别的错误类型时漏掉。
+                            errorMessage = "Login failed."
                         }
                     } label: {
                         Text("Login")
