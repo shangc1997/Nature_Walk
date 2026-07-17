@@ -1,143 +1,105 @@
-# Group Nature Walk Project
+# Nature Walk
 
-Group Nature Walk Project is a SwiftUI iOS group assignment for the Introduction to iOS Development course. The app lets:
+An iOS course project for discovering group outings, reviewing session details, contacting hosts, sharing activities, and maintaining user-specific favorites.
 
-- Users sign in
-- Browse available group sessions
-- View session details
-- Contact the host
-- Share session information
-- Manage a personal favorites list
+## Demo
 
-## Team Members
+| Sign in | Browse sessions |
+| --- | --- |
+| <img src="Images/login.png" width="260" alt="Nature Walk login screen with remembered credentials"> | <img src="Images/sessions.png" width="260" alt="Available nature walk sessions with photos and per-person pricing"> |
+| Restore remembered credentials and authenticate with a sample account. | Compare available outings and open a session for more information. |
 
-- Chuhan Shang
-- Bishakha
+| Review session details | Manage favorites |
+| --- | --- |
+| <img src="Images/session-details.png" width="260" alt="Nature walk session details with photos, host contact, favorite, and share actions"> | <img src="Images/favorites.png" width="260" alt="User-specific favorite nature walk sessions"> |
+| Review pricing, ratings, photos, host details, and native contact and sharing actions. | Revisit saved outings or remove individual and all user-specific favorites. |
 
-## Course Information
+## Project Context and Scope
 
-- Course Name: Introduction to iOS Development
-- Semester: Spring/Summer 2026
+Nature Walk was designed and implemented by Chuhan Shang. Chuhan built the SwiftUI interface, authentication flow, session browsing experience, user-specific favorites persistence, and native sharing and calling integrations.
 
-## Project Overview
+The app is a local prototype: authentication and session records use bundled sample data rather than a backend service. Remote images require an internet connection.
 
-The app starts on `LoginView` and moves into a tab-based main interface after a successful login. The main interface is built in `ContentView` and contains three sections:
+## Key Workflows
 
-- `SessionView`
-- `FavoritesView`
-- `ProfileView`
+- Sign in with a sample account, with validation for missing or incorrect credentials.
+- Optionally restore remembered credentials on the next launch without automatically signing in.
+- Browse three sample outings and open a detail screen with pricing, rating, photos, description, and host information.
+- Call a host through the iOS dialer or share a formatted session summary with the system share sheet.
+- Add or remove sessions from a favorites list scoped to the active user.
+- Remove one favorite with a confirmation prompt or clear the entire list.
+- Review the active user's profile and return to the login screen through a confirmed logout flow.
 
-The project currently uses hard-coded sample users and sessions to demonstrate the required app flow.
+## Technical Highlights
 
-## Current Features
+- **Shared observable state:** `SessionViewModel` and `UserViewModel` use the Observation framework and are injected through SwiftUI's environment, keeping authentication and favorites consistent across tabs without global singletons.
+- **User-specific persistence:** Codable user records and favorite session IDs are stored in `UserDefaults`. Stable UUIDs for bundled sessions preserve favorite mappings across launches.
+- **Native platform integrations:** `AsyncImage` loads remote session media, `ShareLink` presents the system share sheet, and `openURL` creates sanitized `tel://` links for host calls.
+- **Explicit session behavior:** Remember Me restores form values, while the authenticated session remains in memory and logout returns the app to its login root.
 
-### Login Flow
+> **Prototype security note:** The sample passwords and remembered credentials are stored locally in plain form for coursework demonstration. A real application should use server-side authentication and Keychain-backed credential storage.
 
-- Login screen with email and password fields
-- Remember Me toggle
-- Validation for empty email and password fields
-- Two sample accounts for authentication:
-  - `test@gmail.com` / `test123`
-  - `admin@gmail.com` / `admin123`
-- App launches to the login screen
-- Remembered credentials are restored on launch when Remember Me was enabled
-- Remember Me does not auto-enter the main app
-- Logout returns the user to the login screen
+## Architecture
 
-### Sessions
+The app entry point owns both observable view models and switches between the login flow and the authenticated tab interface. Views read shared state from the SwiftUI environment and send user actions back to the relevant view model.
 
-- Session list screen built in `SessionView`
-- At least 3 hard-coded sessions managed by `SessionViewModel`
-- Each list item shows:
-  - session photo
-  - session name
-  - price per person
-- Tapping a session opens `DetailSessionView`
+```text
+Group_Nature_Walk_ProjectApp
+├── LoginView ─────────────── UserViewModel ── UserDefaults
+└── ContentView (TabView)
+    ├── SessionView ───────── SessionViewModel ── bundled sample sessions
+    │   └── DetailSessionView
+    ├── FavoritesView ─────── UserViewModel + SessionViewModel
+    └── ProfileView ───────── UserViewModel
+```
 
-### Session Details
-
-- Session name
-- Price per person
-- Star rating
-- Two photos
-- Session description
-- Guide / organization name
-- Host phone number
-- Tap-to-call behavior using the iOS phone dialer
-- Share sheet support for sharing the session name and price
-- Add to Favorites / Favorited button state
-
-### Favorites
-
-- User-specific favorites list in `FavoritesView`
-- Add and remove favorites from the detail screen
-- Remove a single favorite with swipe actions
-- Remove all favorites with the toolbar action
-- Favorites are filtered by the currently logged-in user
-
-### Profile
-
-- Displays the current user's name and email
-- Logout button
-
-## Data Persistence
-
-The app uses `UserDefaults` to persist:
-
-- Remember Me state
-- Remembered email
-- Remembered password
-- Saved user data
-- Each user's favorite session IDs
-- The most recently persisted logged-in user identity
-
-## Technologies Used
-
-- Swift 5
-- SwiftUI
-- Observation framework (`@Observable`)
-- Xcode
-- Git and GitHub
-
-## Project Structure
+The source is organized by responsibility:
 
 ```text
 Group_Nature_Walk_Project/
-├── .gitignore
-├── Group_Nature_Walk_Project/
-│   ├── Assets.xcassets/
-│   ├── Model/
-│   │   ├── Session.swift
-│   │   └── User.swift
-│   ├── View/
-│   │   ├── ContentView.swift
-│   │   ├── DetailSessionView.swift
-│   │   ├── FavoritesView.swift
-│   │   ├── LoginView.swift
-│   │   ├── ProfileView.swift
-│   │   ├── SessionListItem.swift
-│   │   └── SessionView.swift
-│   ├── ViewModel/
-│   │   ├── SessionViewModel.swift
-│   │   └── UserViewModel.swift
-│   └── Group_Nature_Walk_ProjectApp.swift
-├── Group_Nature_Walk_Project.xcodeproj/
-│   ├── project.pbxproj
-│   └── project.xcworkspace/
-│       └── contents.xcworkspacedata
-└── README.md
+├── Model/       # Codable Session and User value types
+├── View/        # Login, tab, list, detail, favorites, and profile UI
+├── ViewModel/   # Session data, authentication, and persistence logic
+└── Group_Nature_Walk_ProjectApp.swift
 ```
 
-## How to Run the Project
+## Tech Stack
 
-1. Clone this repository.
+| Area | Technology |
+| --- | --- |
+| Language | Swift 5 |
+| UI | SwiftUI |
+| State management | Observation (`@Observable`) and SwiftUI environment injection |
+| Persistence | `UserDefaults`, `Codable`, and `JSONEncoder` / `JSONDecoder` |
+| Platform APIs | `AsyncImage`, `ShareLink`, and `openURL` |
+| Development | Xcode project targeting iPhone and iPad |
+
+## Running the Project
+
+### Prerequisites
+
+- macOS with Xcode 26.5 or a compatible newer version
+- An iOS 26.5 simulator or device, matching the configured deployment target
+- Internet access to load the remote sample images
+
+### Run
+
+1. Clone the repository.
 2. Open `Group_Nature_Walk_Project.xcodeproj` in Xcode.
-3. Select an iPhone simulator or a real device.
-4. Build and run the app.
+3. Select the `Group_Nature_Walk_Project` scheme and an iOS simulator or connected device.
+4. Build and run with **Product > Run** (`⌘R`).
 
-## Development Notes
+Use either bundled sample account:
 
-- Session data is currently hard-coded in `SessionViewModel`
-- Sample user accounts are currently defined in `UserViewModel`
-- Favorites persistence depends on stable session IDs in the sample data
-- Remember Me data is stored locally for coursework demonstration purposes
+| Email | Password |
+| --- | --- |
+| `test@gmail.com` | `test123` |
+| `admin@gmail.com` | `admin123` |
+
+No API keys or additional configuration files are required.
+
+## Author
+
+**Chuhan Shang**
+
+[GitHub](https://github.com/shangc97)
