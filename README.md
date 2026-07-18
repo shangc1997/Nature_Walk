@@ -33,7 +33,9 @@ The app is a local prototype: authentication and session records use bundled sam
 ## Technical Highlights
 
 - **Shared observable state:** `SessionViewModel` and `UserViewModel` use the Observation framework and are injected through SwiftUI's environment, keeping authentication and favorites consistent across tabs without global singletons.
+- **Testable dependencies:** Both view models support constructor injection. Tests can provide fixed session data and an isolated `UserDefaults` suite while production code continues to use bundled sessions and `UserDefaults.standard` by default.
 - **User-specific persistence:** Codable user records and favorite session IDs are stored in `UserDefaults`. Stable UUIDs for bundled sessions preserve favorite mappings across launches.
+- **Explicit persistence failures:** User decoding and encoding use `do`/`catch` instead of silently discarding errors. Invalid saved data falls back to the bundled users so the prototype remains usable, while failures are surfaced in debug output.
 - **Native platform integrations:** `AsyncImage` loads remote session media, `ShareLink` presents the system share sheet, and `openURL` creates sanitized `tel://` links for host calls.
 - **Explicit session behavior:** Remember Me restores form values, while the authenticated session remains in memory and logout returns the app to its login root.
 
@@ -61,6 +63,9 @@ Group_Nature_Walk_Project/
 ├── View/        # Login, tab, list, detail, favorites, and profile UI
 ├── ViewModel/   # Session data, authentication, and persistence logic
 └── Group_Nature_Walk_ProjectApp.swift
+Group_Nature_Walk_ProjectTests/
+├── SessionViewModelTests.swift
+└── UserViewModelTests.swift
 ```
 
 ## Tech Stack
@@ -72,7 +77,22 @@ Group_Nature_Walk_Project/
 | State management | Observation (`@Observable`) and SwiftUI environment injection |
 | Persistence | `UserDefaults`, `Codable`, and `JSONEncoder` / `JSONDecoder` |
 | Platform APIs | `AsyncImage`, `ShareLink`, and `openURL` |
+| Testing | Swift Testing (`@Test` and `#expect`) |
 | Development | Xcode project targeting iPhone and iPad |
+
+## Testing
+
+The `Group_Nature_Walk_ProjectTests` target contains automated unit tests for the view models. The suite uses injected dependencies to keep tests deterministic and isolated from the app's real persisted state.
+
+Covered behavior includes:
+
+- Default and custom session collection initialization
+- Successful login and normalized email handling
+- Empty email and invalid password errors
+- Remember Me persistence and credential clearing
+- Favorites persistence across view-model instances
+
+The tests can be run from the `Group_Nature_Walk_Project` scheme in Xcode with **Product > Test** (`⌘U`).
 
 ## Running the Project
 
