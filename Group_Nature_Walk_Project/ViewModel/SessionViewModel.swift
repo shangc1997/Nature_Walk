@@ -25,7 +25,7 @@ final class SessionViewModel {
             id: UUID(uuidString: "11111111-1111-1111-1111-111111111111")!,
             name: "Toronto Food Walking Tour",
             description:
-                "Explore local restaurants and hidden food spots with an experienced guide.",
+                "Explore local restaurants and hidden food spots with an experienced guide. Explore local restaurants and hidden food spots with an experienced guide. Explore local restaurants and hidden food spots with an experienced guide. Explore local restaurants and hidden food spots with an experienced guide. Explore local restaurants and hidden food spots with an experienced guide.",
             starRating: 4.8,
             hostName: "Toronto Local Guides",
             hostPhoneNumber: "416-555-1010",
